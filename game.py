@@ -40,62 +40,80 @@ is_jump = False
 jump_count = 8
 
 enemy_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(enemy_timer, 7000)
+pygame.time.set_timer(enemy_timer, 3000)
 
+label = pygame.font.Font('fonts/Poppins/Poppins-BlackItalic.ttf', 50)
+lose_label = label.render('You lose :(', False, (193,196,199))
+restart_label = label.render('Restart?', False, (115,132,148))
+restart_label_rect = restart_label.get_rect(topleft=(300, 250))
+
+gameplay = True
 
 running = True
 while running:
-    keys = pygame.key.get_pressed()
+
     screen.blit(backyard, (backyard_x,0))
     screen.blit(backyard, (backyard_x + 700,0))
 
-    player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))
 
-    if enemy_list_in_game:
-        for el in enemy_list_in_game:
-            screen.blit(enemy, el)
-            el.x -= 5
+    if gameplay:
 
-            if player_rect.colliderect(el):
-                print("You lose")
+        player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))
 
+        if enemy_list_in_game:
+             for (i, el) in enumerate(enemy_list_in_game):
+                screen.blit(enemy, el)
+                el.x -= 5
 
+                if el.x < -50:
+                    enemy_list_in_game.pop(i)
 
-    if keys[pygame.K_LEFT]:
-        screen.blit(walk_left[player_anim_count], (player_x, player_y))
-    else:
-        screen.blit(walk_right[player_anim_count], (player_x, player_y))
+                if player_rect.colliderect(el):
+                    gameplay = False
+        keys = pygame.key.get_pressed()
 
-
-
-
-    if keys[pygame.K_LEFT] and player_x > 50:
-        player_x -= player_speed
-    elif keys[pygame.K_RIGHT] and player_x < 600:
-        player_x += player_speed
-
-    if not is_jump:
-        if keys[pygame.K_UP]:
-            is_jump = True
-    else:
-        if jump_count >= -8:
-            if jump_count > 0:
-                player_y -= (jump_count ** 2) / 2
-            else:
-                player_y += (jump_count ** 2) / 2
-            jump_count -= 1
+        if keys[pygame.K_LEFT]:
+            screen.blit(walk_left[player_anim_count], (player_x, player_y))
         else:
-            is_jump = False
-            jump_count = 8
+            screen.blit(walk_right[player_anim_count], (player_x, player_y))
 
-    if player_anim_count == 7:
-        player_anim_count = 0
+        if keys[pygame.K_LEFT] and player_x > 50:
+            player_x -= player_speed
+        elif keys[pygame.K_RIGHT] and player_x < 600:
+            player_x += player_speed
+
+        if not is_jump:
+            if keys[pygame.K_UP]:
+                is_jump = True
+        else:
+            if jump_count >= -8:
+                if jump_count > 0:
+                    player_y -= (jump_count ** 2) / 2
+                else:
+                    player_y += (jump_count ** 2) / 2
+                jump_count -= 1
+            else:
+                is_jump = False
+                jump_count = 8
+
+        if player_anim_count == 7:
+            player_anim_count = 0
+        else:
+            player_anim_count += 1
+
+        backyard_x -= 2
+        if backyard_x == -700:
+            backyard_x = 0
     else:
-        player_anim_count +=1
+        screen.fill((87,88,89))
+        screen.blit(lose_label, (300, 100))
+        screen.blit(restart_label, restart_label_rect)
 
-    backyard_x -= 2
-    if backyard_x == -700:
-        backyard_x = 0
+        mouse = pygame.mouse.get_pos()
+        if restart_label_rect.collidepoint(mouse) and pygame.mouse.get_pressed()[0] :
+            gameplay = True
+            player_x = 100
+            enemy_list_in_game.clear()
 
     pygame.display.update()
 
@@ -105,4 +123,5 @@ while running:
             pygame.quit()
         if event.type == enemy_timer:
             enemy_list_in_game.append(enemy.get_rect(topleft=(710, 310)))
+
     clock.tick(20)
