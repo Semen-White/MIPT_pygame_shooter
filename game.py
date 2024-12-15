@@ -1,14 +1,14 @@
-import pygame
+import pygame #импортируем библиотеку pygame
 
 clock = pygame.time.Clock()
 
 pygame.init()
-screen = pygame.display.set_mode((700, 400))
-pygame.display.set_caption("My game")
+screen = pygame.display.set_mode((700, 400)) #размеры игрового экрана
+pygame.display.set_caption("My game") #название игры
 
 #Player
-backyard = pygame.image.load('images/backyard.jpg').convert()
-player = pygame.image.load('images/player_right/player_right1.png')
+backyard = pygame.image.load('images/backyard.jpg').convert() #картинка заднего фона
+player = pygame.image.load('images/player_right/player_right1.png') #картинка игрока
 walk_right = [pygame.image.load('images/player_right/player_right1.png'),
     pygame.image.load('images/player_right/player_right2.png').convert_alpha(),
     pygame.image.load('images/player_right/player_right3.png').convert_alpha(),
@@ -16,7 +16,7 @@ walk_right = [pygame.image.load('images/player_right/player_right1.png'),
     pygame.image.load('images/player_right/player_right5.png').convert_alpha(),
     pygame.image.load('images/player_right/player_right6.png').convert_alpha(),
     pygame.image.load('images/player_right/player_right7.png').convert_alpha(),
-    pygame.image.load('images/player_right/player_right8.png').convert_alpha()]
+    pygame.image.load('images/player_right/player_right8.png').convert_alpha()] #спрайт движения направо
 walk_left = [pygame.image.load('images/player_left/player_left1.png').convert_alpha(),
     pygame.image.load('images/player_left/player_left2.png').convert_alpha(),
     pygame.image.load('images/player_left/player_left3.png').convert_alpha(),
@@ -24,7 +24,7 @@ walk_left = [pygame.image.load('images/player_left/player_left1.png').convert_al
     pygame.image.load('images/player_left/player_left5.png').convert_alpha(),
     pygame.image.load('images/player_left/player_left6.png').convert_alpha(),
     pygame.image.load('images/player_left/player_left7.png').convert_alpha(),
-    pygame.image.load('images/player_left/player_left8.png').convert_alpha()]
+    pygame.image.load('images/player_left/player_left8.png').convert_alpha()] #спрайт движения налево
 
 enemy = pygame.image.load('images/enemy/ghost.png').convert_alpha()
 enemy_list_in_game = []
@@ -60,9 +60,9 @@ while running:
     screen.blit(backyard, (backyard_x + 700,0))
 
 
-    if gameplay:
+    if gameplay: #основной игровой цикл
 
-        player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))
+        player_rect = walk_left[0].get_rect(topleft=(player_x, player_y)) #хитбокс игрока
 
         if enemy_list_in_game:
              for (i, el) in enumerate(enemy_list_in_game):
@@ -136,7 +136,7 @@ while running:
             fireballs.clear()
             fireballs_left = 5
 
-    pygame.display.update()
+    pygame.display.update() #обновление экрана для движения на экране
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
