@@ -47,6 +47,10 @@ lose_label = label.render('You lose :(', False, (193,196,199))
 restart_label = label.render('Restart?', False, (115,132,148))
 restart_label_rect = restart_label.get_rect(topleft=(300, 250))
 
+fireballs_left = 5
+fireball = pygame.image.load('images/fireball.png').convert_alpha()
+fireballs = []
+
 gameplay = True
 
 running = True
@@ -104,6 +108,21 @@ while running:
         backyard_x -= 2
         if backyard_x == -700:
             backyard_x = 0
+
+        if fireballs:
+            for (i, el) in enumerate(fireballs):
+                screen.blit(fireball, (el.x, el.y))
+                el.x += 12
+
+                if el.x > 750:
+                    fireballs.pop(i)
+
+                if enemy_list_in_game:
+                    for (index, enemy_el) in enumerate(enemy_list_in_game):
+                        if el.colliderect(enemy_el):
+                            enemy_list_in_game.pop(index)
+                            fireballs.pop(i)
+
     else:
         screen.fill((87,88,89))
         screen.blit(lose_label, (300, 100))
@@ -114,6 +133,8 @@ while running:
             gameplay = True
             player_x = 100
             enemy_list_in_game.clear()
+            fireballs.clear()
+            fireballs_left = 5
 
     pygame.display.update()
 
@@ -123,5 +144,8 @@ while running:
             pygame.quit()
         if event.type == enemy_timer:
             enemy_list_in_game.append(enemy.get_rect(topleft=(710, 310)))
+        if gameplay and event.type == pygame.KEYUP and event.key == pygame.K_SPACE and fireballs_left > 0:
+            fireballs.append(fireball.get_rect(topleft=(player_x + 50, player_y + 10)))
+            fireballs_left -= 1
 
     clock.tick(20)
