@@ -11,6 +11,7 @@ ticks = 60
 
 # Player
 startscreen = pygame.image.load('images/start_screen.png').convert_alpha()
+backyard_sound = pygame.mixer.Sound('sounds/music.mp3')
 backyard = pygame.image.load('images/backyard.jpg').convert()  # картинка заднего фона
 player = pygame.image.load('images/player_right/player_right1.png')  # картинка игрока
 walk_right = [pygame.image.load('images/player_right/player_right1.png'),
@@ -82,6 +83,7 @@ while running:
 
         if gameplay:  # основной игровой цикл
 
+            backyard_sound.play()
             player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))  # хитбокс игрока
 
             if enemy_list_in_game:
