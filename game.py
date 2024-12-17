@@ -49,7 +49,7 @@ jump_count = 7
 
 enemy_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(enemy_timer, 2500)
-enemy_spawn_time = 0
+enemy_speed_mod = 0
 
 label = pygame.font.Font('fonts/Poppins/Poppins-BlackItalic.ttf', 35)
 lose_label = label.render('You lose :(', True, (232, 137, 218))
@@ -84,7 +84,7 @@ while running:
 
         if gameplay:  # основной игровой цикл
 
-            #backyard_sound.play() # <---- выключить при необходимости
+            backyard_sound.play() # <---- выключить при необходимости
             player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))  # хитбокс игрока
 
             if enemy_list_in_game: # <---- проверка наличия врага
